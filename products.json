@@ -1,0 +1,80 @@
+[
+  {
+    "id": "825016",
+    "name_cs": "Olejový filtr",
+    "name_en": "Oil Filter",
+    "desc_cs": "Originální olejový filtr pro motory ROTAX 912/914/915/916.",
+    "desc_en": "Genuine oil filter for ROTAX 912/914/915/916 engines.",
+    "price": 371,
+    "currency": "CZK",
+    "category": "accessories",
+    "engine": ["912", "914", "915", "916"],
+    "image": "images/825016.jpg",
+    "stripe_price_id": "price_REPLACE_ME"
+  },
+  {
+    "id": "289110",
+    "name_cs": "Motorový olej XPS 5W50",
+    "name_en": "Engine Oil XPS 5W50",
+    "desc_cs": "Doporučený syntetický motorový olej BRP-Rotax.",
+    "desc_en": "BRP-Rotax recommended synthetic engine oil.",
+    "price": 440,
+    "currency": "CZK",
+    "category": "accessories",
+    "engine": ["912", "914", "915", "916"],
+    "image": "images/289110.jpg",
+    "stripe_price_id": "price_REPLACE_ME"
+  },
+  {
+    "id": "000918",
+    "name_cs": "Motorový olej AeroShell SPORT PLUS 4",
+    "name_en": "Engine Oil AeroShell SPORT PLUS 4",
+    "desc_cs": "Letecký motorový olej AeroShell Sport Plus 4.",
+    "desc_en": "Aviation engine oil AeroShell Sport Plus 4.",
+    "price": 384,
+    "currency": "CZK",
+    "category": "accessories",
+    "engine": ["912", "914"],
+    "image": "images/000918.jpg",
+    "stripe_price_id": "price_REPLACE_ME"
+  },
+  {
+    "id": "297656",
+    "name_cs": "Zapalovací svíčka SPARK PLUG 12",
+    "name_en": "Spark Plug 12",
+    "desc_cs": "Originální zapalovací svíčka pro motory ROTAX.",
+    "desc_en": "Genuine spark plug for ROTAX engines.",
+    "price": 522,
+    "currency": "CZK",
+    "category": "accessories",
+    "engine": ["912", "914"],
+    "image": "images/297656.jpg",
+    "stripe_price_id": "price_REPLACE_ME"
+  },
+  {
+    "id": "825511",
+    "name_cs": "Vzduchový filtr",
+    "name_en": "Air Filter",
+    "desc_cs": "Vzduchový filtr pro karburátor ROTAX.",
+    "desc_en": "Air filter for ROTAX carburetor.",
+    "price": 844,
+    "currency": "CZK",
+    "category": "accessories",
+    "engine": ["912", "914"],
+    "image": "images/825511.jpg",
+    "stripe_price_id": "price_REPLACE_ME"
+  },
+  {
+    "id": "886011",
+    "name_cs": "Olejový chladič (sada)",
+    "name_en": "Oil Cooler (set)",
+    "desc_cs": "Kompletní sada olejového chladiče pro motory ROTAX.",
+    "desc_en": "Complete oil cooler set for ROTAX engines.",
+    "price": 3500,
+    "currency": "CZK",
+    "category": "cooling",
+    "engine": ["912", "914", "915", "916"],
+    "image": "images/886011.jpg",
+    "stripe_price_id": "price_REPLACE_ME"
+  }
+]

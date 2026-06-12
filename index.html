@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TEVESO | Náhradní díly ROTAX | ROTAX Spare Parts</title>
+  <meta name="description" content="Officiální distributor leteckých motorů ROTAX pro ČR a SR. Official ROTAX aircraft engine distributor for CZ and SK." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    :root {
+      --navy: #0b1628;
+      --navy-mid: #132240;
+      --navy-light: #1e3460;
+      --amber: #f0a500;
+      --amber-dark: #c47f00;
+      --white: #f4f6f9;
+      --gray: #8a9bbf;
+      --gray-light: #c2cfe0;
+      --red: #e03f3f;
+      --card-bg: #111f38;
+      --border: rgba(240,165,0,0.15);
+      --font-display: 'Barlow Condensed', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(11,22,40,0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo-badge {
+      background: var(--amber);
+      color: var(--navy);
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 20px;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+    }
+    .nav-logo-sub {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: var(--gray);
+      text-transform: uppercase;
+    }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+
+    /* Language toggle */
+    .lang-toggle {
+      display: flex; align-items: center;
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .lang-btn {
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--gray);
+      transition: all 0.2s;
+      font-family: var(--font-body);
+    }
+    .lang-btn.active {
+      background: var(--amber);
+      color: var(--navy);
+    }
+
+    /* Cart button */
+    .cart-btn {
+      position: relative;
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      display: flex; align-items: center; gap: 8px;
+      transition: border-color 0.2s;
+    }
+    .cart-btn:hover { border-color: var(--amber); }
+    .cart-count {
+      background: var(--amber);
+      color: var(--navy);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 20px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 64px 24px 56px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '912 · 914 · 915 · 916';
+      position: absolute;
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      font-family: var(--font-display);
+      font-size: clamp(80px, 18vw, 220px);
+      font-weight: 900;
+      color: rgba(240,165,0,0.04);
+      white-space: nowrap;
+      pointer-events: none;
+      letter-spacing: 8px;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-display);
+      font-size: 12px;
+      letter-spacing: 4px;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(40px, 8vw, 88px);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+    }
+    .hero h1 span { color: var(--amber); }
+    .hero-sub {
+      font-size: 15px;
+      color: var(--gray-light);
+      max-width: 520px;
+      margin: 0 auto 32px;
+      font-weight: 300;
+    }
+    .hero-badges {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      justify-content: center;
+    }
+    .hero-badge {
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gray-light);
+      letter-spacing: 1px;
+    }
+    .hero-badge span { color: var(--amber); }
+
+    /* ── FILTERS ── */
+    .filters-bar {
+      padding: 20px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: var(--navy-mid);
+    }
+    .filter-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--gray);
+      text-transform: uppercase;
+      margin-right: 4px;
+      font-weight: 600;
+    }
+    .filter-btn {
+      padding: 5px 14px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--gray-light);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.5px;
+    }
+    .filter-btn:hover { border-color: var(--amber); color: var(--amber); }
+    .filter-btn.active { background: var(--amber); color: var(--navy); border-color: var(--amber); font-weight: 600; }
+
+    /* Search */
+    .search-wrap {
+      margin-left: auto;
+      position: relative;
+    }
+    .search-input {
+      background: var(--navy);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 7px 14px 7px 34px;
+      border-radius: 6px;
+      font-family: var(--font-body);
+      font-size: 13px;
+      width: 200px;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .search-input:focus { border-color: var(--amber); }
+    .search-icon {
+      position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+      color: var(--gray); pointer-events: none; font-size: 14px;
+    }
+
+    /* ── PRODUCT GRID ── */
+    .products-section { padding: 32px 24px 64px; max-width: 1280px; margin: 0 auto; }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 13px;
+      letter-spacing: 4px;
+      color: var(--gray);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .product-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .product-card:hover { border-color: rgba(240,165,0,0.4); transform: translateY(-2px); }
+    .product-img {
+      width: 100%; aspect-ratio: 4/3;
+      background: var(--navy-mid);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .product-img img { width: 100%; height: 100%; object-fit: contain; padding: 16px; }
+    .product-img-placeholder {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 900;
+      color: rgba(240,165,0,0.12);
+      letter-spacing: 2px;
+    }
+    .product-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+    .product-id {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--amber);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .product-name {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+    .product-desc {
+      font-size: 12px;
+      color: var(--gray);
+      flex: 1;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .product-engines {
+      display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 12px;
+    }
+    .engine-tag {
+      background: rgba(240,165,0,0.1);
+      border: 1px solid rgba(240,165,0,0.2);
+      color: var(--amber);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 3px;
+      letter-spacing: 1px;
+    }
+    .product-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+    .product-price {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .product-price small {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--gray);
+      margin-left: 2px;
+    }
+    .add-btn {
+      background: var(--amber);
+      color: var(--navy);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: background 0.15s;
+    }
+    .add-btn:hover { background: var(--amber-dark); }
+
+    /* ── CART DRAWER ── */
+    .cart-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+    .cart-drawer {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: min(420px, 100vw);
+      background: var(--navy-mid);
+      border-left: 1px solid var(--border);
+      z-index: 201;
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .cart-drawer.open { transform: translateX(0); }
+    .cart-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .cart-header h2 {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+    .close-btn {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--gray); width: 34px; height: 34px;
+      border-radius: 6px; cursor: pointer; font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .close-btn:hover { color: var(--white); border-color: var(--gray); }
+    .cart-items { flex: 1; overflow-y: auto; padding: 16px 24px; }
+    .cart-empty {
+      text-align: center; padding: 48px 0;
+      color: var(--gray); font-size: 14px;
+    }
+    .cart-empty-icon { font-size: 40px; margin-bottom: 8px; }
+    .cart-item {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .cart-item-info { flex: 1; }
+    .cart-item-name { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+    .cart-item-id { font-size: 11px; color: var(--amber); letter-spacing: 1px; }
+    .cart-item-price { font-weight: 600; font-size: 14px; white-space: nowrap; }
+    .cart-item-controls { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+    .qty-btn {
+      background: var(--navy); border: 1px solid var(--border);
+      color: var(--white); width: 26px; height: 26px;
+      border-radius: 4px; cursor: pointer; font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .qty-btn:hover { border-color: var(--amber); }
+    .qty-num { font-size: 14px; font-weight: 600; min-width: 20px; text-align: center; }
+    .remove-btn {
+      background: transparent; border: none;
+      color: var(--gray); cursor: pointer; font-size: 12px;
+      margin-left: 4px; text-decoration: underline;
+      transition: color 0.15s;
+    }
+    .remove-btn:hover { color: var(--red); }
+    .cart-footer {
+      padding: 20px 24px;
+      border-top: 1px solid var(--border);
+    }
+    .cart-total {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px;
+    }
+    .cart-total-label { font-size: 13px; color: var(--gray); letter-spacing: 2px; text-transform: uppercase; }
+    .cart-total-price {
+      font-family: var(--font-display);
+      font-size: 28px; font-weight: 700;
+    }
+    .checkout-btn {
+      width: 100%;
+      background: var(--amber);
+      color: var(--navy);
+      border: none;
+      padding: 14px;
+      border-radius: 6px;
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: background 0.15s;
+    }
+    .checkout-btn:hover { background: var(--amber-dark); }
+    .checkout-btn:disabled { background: var(--navy-light); color: var(--gray); cursor: default; }
+    .cart-note {
+      font-size: 11px; color: var(--gray);
+      text-align: center; margin-top: 10px;
+      line-height: 1.5;
+    }
+
+    /* ── CONTACT ── */
+    .contact-section {
+      background: var(--navy-mid);
+      border-top: 1px solid var(--border);
+      padding: 48px 24px;
+      text-align: center;
+    }
+    .contact-section h2 {
+      font-family: var(--font-display);
+      font-size: 36px; font-weight: 700; letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+    .contact-section p { color: var(--gray); font-size: 14px; margin-bottom: 24px; }
+    .contact-links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+    .contact-link {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--navy); border: 1px solid var(--border);
+      color: var(--white); text-decoration: none;
+      padding: 10px 20px; border-radius: 6px;
+      font-size: 14px; font-weight: 500;
+      transition: border-color 0.2s;
+    }
+    .contact-link:hover { border-color: var(--amber); color: var(--amber); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--gray);
+    }
+    footer a { color: var(--gray); text-decoration: none; }
+    footer a:hover { color: var(--amber); }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: var(--amber); color: var(--navy);
+      padding: 10px 24px; border-radius: 6px;
+      font-weight: 600; font-size: 14px;
+      z-index: 300;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── STRIPE config notice ── */
+    .config-notice {
+      background: rgba(240,165,0,0.1);
+      border: 1px solid rgba(240,165,0,0.3);
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-size: 12px;
+      color: var(--amber);
+      margin: 12px 0 0;
+      text-align: left;
+    }
+
+    /* No results */
+    .no-results {
+      text-align: center; padding: 64px 0;
+      color: var(--gray); grid-column: 1/-1;
+    }
+    .no-results h3 { font-family: var(--font-display); font-size: 28px; margin-bottom: 8px; color: var(--white); }
+
+    @media (max-width: 600px) {
+      .hero { padding: 40px 16px 36px; }
+      .filters-bar { gap: 6px; }
+      .search-wrap { width: 100%; margin-left: 0; }
+      .search-input { width: 100%; }
+      .products-section { padding: 24px 16px 48px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-badge">TEVESO</div>
+    <div class="nav-logo-sub" data-cs="Náhradní díly" data-en="Spare Parts">Náhradní díly</div>
+  </a>
+  <div class="nav-right">
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('cs')">CS</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+    <button class="cart-btn" onclick="toggleCart()">
+      🛒 <span data-cs="Košík" data-en="Cart">Košík</span>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow" data-cs="Officiální distributor pro ČR a SR" data-en="Official distributor for CZ and SK">Officiální distributor pro ČR a SR</div>
+  <h1>ROTAX<br /><span data-cs="Díly & Příslušenství" data-en="Parts & Accessories">Díly & Příslušenství</span></h1>
+  <p class="hero-sub" data-cs="Originální náhradní díly a příslušenství pro letecké motory ROTAX. Skladem v Hradci Králové." data-en="Genuine spare parts and accessories for ROTAX aircraft engines. In stock in Hradec Králové.">Originální náhradní díly a příslušenství pro letecké motory ROTAX. Skladem v Hradci Králové.</p>
+  <div class="hero-badges">
+    <div class="hero-badge"><span>912</span> UL · ULS · iS</div>
+    <div class="hero-badge"><span>914</span> UL · F</div>
+    <div class="hero-badge"><span>915</span> iS · iSc</div>
+    <div class="hero-badge"><span>916</span> iS · iSc</div>
+  </div>
+</section>
+
+<!-- FILTERS -->
+<div class="filters-bar">
+  <span class="filter-label" data-cs="Motor:" data-en="Engine:">Motor:</span>
+  <button class="filter-btn active" onclick="setFilter('all')" data-filter="all" data-cs="Vše" data-en="All">Vše</button>
+  <button class="filter-btn" onclick="setFilter('912')" data-filter="912">912</button>
+  <button class="filter-btn" onclick="setFilter('914')" data-filter="914">914</button>
+  <button class="filter-btn" onclick="setFilter('915')" data-filter="915">915</button>
+  <button class="filter-btn" onclick="setFilter('916')" data-filter="916">916</button>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" type="text" id="searchInput"
+      placeholder="Hledat / Search..."
+      oninput="renderProducts()" />
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="products-section">
+  <div class="section-title" id="sectionTitle" data-cs="Všechny produkty" data-en="All products">Všechny produkty</div>
+  <div class="products-grid" id="productsGrid"></div>
+</div>
+
+<!-- CONTACT -->
+<section class="contact-section">
+  <h2 data-cs="Kontakt" data-en="Contact">Kontakt</h2>
+  <p data-cs="Osobní vyzvednutí: Hradec Králové a Jaroměr · Odeslání stejný den při objednávce do 9:00" data-en="Personal pickup: Hradec Králové and Jaroměr · Same-day dispatch for orders before 9:00 AM">Osobní vyzvednutí: Hradec Králové a Jaroměr · Odeslání stejný den při objednávce do 9:00</p>
+  <div class="contact-links">
+    <a class="contact-link" href="tel:+420495217127">📞 +420 495 217 127</a>
+    <a class="contact-link" href="mailto:motory@teveso.cz">✉ motory@teveso.cz</a>
+    <a class="contact-link" href="https://www.flyrotax.com/dis/teveso" target="_blank">🌐 flyrotax.com/dis/teveso</a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 TEVESO, s.r.o. · Hradec Králové ·
+    <a href="https://www.flyrotax.com/dis/teveso" target="_blank">flyrotax.com/dis/teveso</a>
+  </p>
+</footer>
+
+<!-- CART OVERLAY + DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h2 data-cs="KOŠÍK" data-en="CART">KOŠÍK</h2>
+    <button class="close-btn" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span class="cart-total-label" data-cs="Celkem" data-en="Total">Celkem</span>
+      <span class="cart-total-price" id="cartTotal">0 Kč</span>
+    </div>
+    <button class="checkout-btn" id="checkoutBtn" onclick="checkout()">
+      <span data-cs="PŘEJÍT K PLATBĚ" data-en="CHECKOUT">PŘEJÍT K PLATBĚ</span>
+    </button>
+    <div class="config-notice" id="stripeNotice">
+      ⚙️ <span data-cs="Stripe ještě není nastaven. Viz README.md pro aktivaci plateb." data-en="Stripe not configured yet. See README.md to activate payments.">Stripe ještě není nastaven. Viz README.md pro aktivaci plateb.</span>
+    </div>
+    <p class="cart-note" data-cs="Zabezpečená platba přes Stripe · SSL šifrování" data-en="Secure payment via Stripe · SSL encryption">Zabezpečená platba přes Stripe · SSL šifrování</p>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── CONFIG ──────────────────────────────────────────────
+  // Replace with your actual Stripe publishable key
+  const STRIPE_PUBLISHABLE_KEY = 'pk_test_REPLACE_WITH_YOUR_KEY';
+  // Replace with your Stripe Payment Link or Checkout session URL
+  // See README.md for setup instructions
+  const STRIPE_CONFIGURED = false; // Set to true after Stripe setup
+
+  // ── STATE ───────────────────────────────────────────────
+  let lang = 'cs';
+  let activeFilter = 'all';
+  let products = [];
+  let cart = JSON.parse(localStorage.getItem('teveso_cart') || '[]');
+
+  // ── LANGUAGE ────────────────────────────────────────────
+  function setLang(l) {
+    lang = l;
+    document.documentElement.lang = l;
+    document.querySelectorAll('[data-cs]').forEach(el => {
+      el.textContent = el.dataset[l];
+    });
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent.toLowerCase() === l);
+    });
+    document.querySelectorAll('[placeholder]').forEach(el => {
+      if (el.id === 'searchInput') el.placeholder = l === 'cs' ? 'Hledat...' : 'Search...';
+    });
+    renderProducts();
+    renderCart();
+  }
+
+  // ── FILTER ──────────────────────────────────────────────
+  function setFilter(f) {
+    activeFilter = f;
+    document.querySelectorAll('[data-filter]').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.filter === f);
+    });
+    renderProducts();
+  }
+
+  // ── PRODUCTS ────────────────────────────────────────────
+  async function loadProducts() {
+    try {
+      const res = await fetch('products.json');
+      products = await res.json();
+    } catch {
+      products = [];
+    }
+    renderProducts();
+  }
+
+  function renderProducts() {
+    const grid = document.getElementById('productsGrid');
+    const search = document.getElementById('searchInput').value.toLowerCase();
+
+    let filtered = products.filter(p => {
+      const matchEngine = activeFilter === 'all' || p.engine.includes(activeFilter);
+      const name = (lang === 'cs' ? p.name_cs : p.name_en).toLowerCase();
+      const desc = (lang === 'cs' ? p.desc_cs : p.desc_en).toLowerCase();
+      const matchSearch = !search || name.includes(search) || desc.includes(search) || p.id.includes(search);
+      return matchEngine && matchSearch;
+    });
+
+    // Update section title count
+    const titleEl = document.getElementById('sectionTitle');
+    const base = titleEl.dataset[lang];
+    titleEl.textContent = `${base} (${filtered.length})`;
+
+    if (!filtered.length) {
+      grid.innerHTML = `<div class="no-results"><h3>${lang === 'cs' ? 'Žádné produkty' : 'No products found'}</h3><p>${lang === 'cs' ? 'Zkuste jiný filtr nebo hledání.' : 'Try a different filter or search.'}</p></div>`;
+      return;
+    }
+
+    grid.innerHTML = filtered.map(p => {
+      const name = lang === 'cs' ? p.name_cs : p.name_en;
+      const desc = lang === 'cs' ? p.desc_cs : p.desc_en;
+      const inCart = cart.find(i => i.id === p.id);
+      return `
+        <div class="product-card">
+          <div class="product-img">
+            ${p.image
+              ? `<img src="${p.image}" alt="${name}" onerror="this.parentElement.innerHTML='<div class=\\'product-img-placeholder\\'>${p.id}</div>'" />`
+              : `<div class="product-img-placeholder">${p.id}</div>`}
+          </div>
+          <div class="product-body">
+            <div class="product-id">PN: ${p.id}</div>
+            <div class="product-name">${name}</div>
+            <div class="product-desc">${desc}</div>
+            <div class="product-engines">
+              ${p.engine.map(e => `<span class="engine-tag">${e}</span>`).join('')}
+            </div>
+            <div class="product-footer">
+              <div class="product-price">${p.price.toLocaleString('cs-CZ')} <small>Kč</small></div>
+              <button class="add-btn" onclick="addToCart('${p.id}')">
+                ${inCart ? (lang === 'cs' ? '✓ PŘIDÁNO' : '✓ ADDED') : (lang === 'cs' ? 'DO KOŠÍKU' : 'ADD')}
+              </button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── CART ────────────────────────────────────────────────
+  function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    if (!product) return;
+    const existing = cart.find(i => i.id === id);
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({ id: product.id, name_cs: product.name_cs, name_en: product.name_en, price: product.price, stripe_price_id: product.stripe_price_id, qty: 1 });
+    }
+    saveCart();
+    renderProducts();
+    renderCart();
+    showToast(lang === 'cs' ? `${product.name_cs} přidáno do košíku` : `${product.name_en} added to cart`);
+  }
+
+  function updateQty(id, delta) {
+    const item = cart.find(i => i.id === id);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+    saveCart(); renderProducts(); renderCart();
+  }
+
+  function removeFromCart(id) {
+    cart = cart.filter(i => i.id !== id);
+    saveCart(); renderProducts(); renderCart();
+  }
+
+  function saveCart() {
+    localStorage.setItem('teveso_cart', JSON.stringify(cart));
+    document.getElementById('cartCount').textContent = cart.reduce((s, i) => s + i.qty, 0);
+  }
+
+  function renderCart() {
+    const el = document.getElementById('cartItems');
+    const totalEl = document.getElementById('cartTotal');
+    const notice = document.getElementById('stripeNotice');
+
+    notice.style.display = STRIPE_CONFIGURED ? 'none' : 'block';
+
+    if (!cart.length) {
+      el.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛒</div>${lang === 'cs' ? 'Košík je prázdný' : 'Your cart is empty'}</div>`;
+      totalEl.textContent = `0 Kč`;
+      document.getElementById('checkoutBtn').disabled = true;
+      return;
+    }
+    document.getElementById('checkoutBtn').disabled = !STRIPE_CONFIGURED;
+
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    totalEl.textContent = `${total.toLocaleString('cs-CZ')} Kč`;
+
+    el.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <div class="cart-item-info">
+          <div class="cart-item-name">${lang === 'cs' ? item.name_cs : item.name_en}</div>
+          <div class="cart-item-id">PN: ${item.id}</div>
+          <div class="cart-item-controls">
+            <button class="qty-btn" onclick="updateQty('${item.id}', -1)">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" onclick="updateQty('${item.id}', 1)">+</button>
+            <button class="remove-btn" onclick="removeFromCart('${item.id}')">${lang === 'cs' ? 'Odebrat' : 'Remove'}</button>
+          </div>
+        </div>
+        <div class="cart-item-price">${(item.price * item.qty).toLocaleString('cs-CZ')} Kč</div>
+      </div>`).join('');
+  }
+
+  function toggleCart() {
+    document.getElementById('cartDrawer').classList.toggle('open');
+    document.getElementById('cartOverlay').classList.toggle('open');
+  }
+
+  // ── CHECKOUT (Stripe) ────────────────────────────────────
+  async function checkout() {
+    if (!STRIPE_CONFIGURED) {
+      showToast(lang === 'cs' ? 'Nejprve nastavte Stripe (viz README)' : 'Configure Stripe first (see README)');
+      return;
+    }
+    // Option A: redirect to Stripe Payment Link
+    // window.location.href = 'YOUR_STRIPE_PAYMENT_LINK';
+
+    // Option B: Stripe Checkout Session (requires backend or Netlify/Vercel function)
+    // const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+    // const lineItems = cart.map(i => ({ price: i.stripe_price_id, quantity: i.qty }));
+    // const { error } = await stripe.redirectToCheckout({ lineItems, mode: 'payment', successUrl: window.location.origin + '/success.html', cancelUrl: window.location.href });
+  }
+
+  // ── TOAST ────────────────────────────────────────────────
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // ── INIT ─────────────────────────────────────────────────
+  saveCart();
+  renderCart();
+  loadProducts();
+</script>
+</body>
+</html>
